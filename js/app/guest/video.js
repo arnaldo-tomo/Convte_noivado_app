@@ -129,7 +129,6 @@ export const video = (() => {
      * @returns {object}
      */
     const init = () => {
-        progress.add();
         c = cache('video').withForceCache();
 
         return {

@@ -394,6 +394,7 @@ export const guest = (() => {
             navigator.vibrate(500);
         }
 
+        video.init().load();
         confetti.tapTapAnimation(div, 100);
         util.changeOpacity(div, false).then((e) => e.remove());
     };
@@ -553,7 +554,6 @@ export const guest = (() => {
             document.getElementById('comment')?.remove();
             document.querySelector('a.nav-link[href="#comment"]')?.closest('li.nav-item')?.remove();
 
-            vid.load();
             img.load();
             aud.load();
             lib.load({ confetti: document.body.getAttribute('data-confetti') === 'true' });
@@ -578,7 +578,6 @@ export const guest = (() => {
                     img.load();
                 }
 
-                vid.load();
                 aud.load();
                 lib.load({ confetti: data.is_confetti_animation });
 
