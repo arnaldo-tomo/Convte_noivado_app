@@ -14,6 +14,9 @@ import { comment } from '../components/comment.js';
 import * as confetti from '../../libs/confetti.js';
 import { pool, request, HTTP_POST } from '../../connection/request.js';
 import { dto } from '../../connection/dto.js';
+import { pwa } from '../../common/pwa.js';
+import { chat } from '../components/chat.js';
+import { emojiPicker } from '../components/emoji-picker.js';
 
 export const guest = (() => {
 
@@ -167,11 +170,6 @@ export const guest = (() => {
             document.getElementById('button-theme').classList.remove('d-none');
         }
 
-        const rsvpBtn = document.getElementById('button-rsvp');
-        if (rsvpBtn) {
-            rsvpBtn.classList.remove('d-none');
-        }
-
         slide();
         theme.spyTop();
 
@@ -183,6 +181,43 @@ export const guest = (() => {
     };
 
     /**
+     * @param {string} choice - 'yes' or 'no'
+     * @returns {void}
+     */
+    const selectRsvp = (choice) => {
+        const yesBtn = document.getElementById('rsvp-yes');
+        const noBtn = document.getElementById('rsvp-no');
+        const hiddenVal = document.getElementById('rsvp-presence-value');
+
+        // Reset both
+        [yesBtn, noBtn].forEach((b) => {
+            b.style.borderColor = 'rgba(var(--bs-emphasis-color-rgb), 0.1)';
+            b.style.background = 'transparent';
+            b.style.transform = 'scale(1)';
+        });
+
+        if (choice === 'yes') {
+            yesBtn.style.borderColor = '#22c55e';
+            yesBtn.style.background = 'rgba(34, 197, 94, 0.08)';
+            yesBtn.style.transform = 'scale(1.03)';
+            hiddenVal.value = '1';
+        } else {
+            noBtn.style.borderColor = '#ef4444';
+            noBtn.style.background = 'rgba(239, 68, 68, 0.08)';
+            noBtn.style.transform = 'scale(1.03)';
+            hiddenVal.value = '2';
+        }
+    };
+
+    /**
+     * @returns {void}
+     */
+    const hidePresenceFromCommentForm = () => {
+        const presenceWrapper = document.getElementById('form-presence')?.closest('.mb-3');
+        if (presenceWrapper) presenceWrapper.style.display = 'none';
+    };
+
+    /**
      * @param {HTMLButtonElement} button
      * @returns {void}
      */
@@ -191,20 +226,17 @@ export const guest = (() => {
         const presenceVal = document.getElementById('rsvp-presence-value').value;
         const commentEl = document.getElementById('rsvp-comment');
 
-        if (!name.value || name.value.trim().length === 0) {
-            name.classList.add('is-invalid');
+        if (!name.value || name.value.trim().length < 2) {
+            name.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.3)';
             name.focus();
+            util.timeOut(() => { name.style.boxShadow = ''; }, 2000);
             return;
         }
-        name.classList.remove('is-invalid');
 
         if (presenceVal === '0') {
-            document.getElementById('rsvp-yes').classList.add('border-warning');
-            document.getElementById('rsvp-no').classList.add('border-warning');
-            util.timeOut(() => {
-                document.getElementById('rsvp-yes').classList.remove('border-warning');
-                document.getElementById('rsvp-no').classList.remove('border-warning');
-            }, 1500);
+            const btns = document.querySelectorAll('.rsvp-choice');
+            btns.forEach((b) => { b.style.borderColor = '#f59e0b'; });
+            util.timeOut(() => btns.forEach((b) => { b.style.borderColor = 'rgba(var(--bs-emphasis-color-rgb), 0.1)'; }), 2000);
             return;
         }
 
@@ -216,38 +248,59 @@ export const guest = (() => {
         // Sync to original form
         const formName = document.getElementById('form-name');
         const formPresence = document.getElementById('form-presence');
-        const formComment = document.getElementById('form-comment');
-
         if (formName) formName.value = name.value;
         if (formPresence) formPresence.value = presenceVal;
-        if (formComment) formComment.value = commentEl.value || '';
 
-        // Save to info storage
+        // Save
         information.set('name', name.value);
         information.set('presence', isPresence);
+        information.set('rsvp_done', true);
 
         request(HTTP_POST, '/api/comment')
             .token(session.getToken())
             .body(dto.postCommentRequest(null, name.value, isPresence, commentEl.value || null, null))
             .send(dto.getCommentResponse)
             .then(() => {
-                // Show success
-                document.querySelector('#modal-rsvp .modal-body').classList.add('d-none');
-                document.querySelector('#modal-rsvp .modal-footer').classList.add('d-none');
-                document.querySelector('#modal-rsvp .text-center.text-white').classList.add('d-none');
+                // Transition to success
+                document.getElementById('rsvp-form-card').classList.add('d-none');
+                const successCard = document.getElementById('rsvp-success-card');
+                successCard.classList.remove('d-none');
 
-                const successEl = document.getElementById('rsvp-success');
-                successEl.classList.remove('d-none');
                 document.getElementById('rsvp-success-message').textContent = isPresence
-                    ? 'Obrigado por confirmar! Esperamos por si no dia 11 de Abril.'
-                    : 'Lamentamos que não possa comparecer. Obrigado por nos avisar!';
+                    ? 'Esperamos por si no dia 11 de Abril! A sua presença fará toda a diferença.'
+                    : 'Lamentamos que não possa comparecer. Obrigado por nos ter avisado!';
 
+                hidePresenceFromCommentForm();
                 confetti.basicAnimation();
             })
             .catch(() => {
                 button.disabled = false;
-                button.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Confirmar';
+                button.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Confirmar Presença';
             });
+    };
+
+    /**
+     * @returns {void}
+     */
+    const initRsvpScrollTrigger = () => {
+        if (information.get('rsvp_done')) {
+            hidePresenceFromCommentForm();
+            return;
+        }
+
+        const target = document.getElementById('wedding-date');
+        if (!target) return;
+
+        let triggered = false;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !triggered) {
+                triggered = true;
+                observer.disconnect();
+                util.timeOut(() => bs.modal('modal-rsvp').show(), 600);
+            }
+        }, { threshold: 0.3 });
+
+        document.addEventListener('undangan.open', () => observer.observe(target));
     };
 
     /**
@@ -381,7 +434,7 @@ export const guest = (() => {
             document.getElementById('information')?.remove();
         }
 
-        // RSVP modal: pre-fill name and reset on close
+        // RSVP modal: pre-fill name on show, reset on close
         const rsvpModal = document.getElementById('modal-rsvp');
         if (rsvpModal) {
             rsvpModal.addEventListener('show.bs.modal', () => {
@@ -391,15 +444,21 @@ export const guest = (() => {
                 }
             });
             rsvpModal.addEventListener('hidden.bs.modal', () => {
-                document.querySelector('#modal-rsvp .modal-body').classList.remove('d-none');
-                document.querySelector('#modal-rsvp .modal-footer').classList.remove('d-none');
-                document.querySelector('#modal-rsvp .text-center.text-white').classList.remove('d-none');
-                document.getElementById('rsvp-success').classList.add('d-none');
+                document.getElementById('rsvp-form-card').classList.remove('d-none');
+                document.getElementById('rsvp-success-card').classList.add('d-none');
+                document.getElementById('rsvp-presence-value').value = '0';
+                document.querySelectorAll('.rsvp-choice').forEach((b) => {
+                    b.style.borderColor = 'rgba(var(--bs-emphasis-color-rgb), 0.1)';
+                    b.style.background = 'transparent';
+                    b.style.transform = 'scale(1)';
+                });
                 const btn = document.getElementById('rsvp-submit');
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Confirmar';
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Confirmar Presença';
             });
         }
+
+        initRsvpScrollTrigger();
 
         // wait until welcome screen is show.
         await util.changeOpacity(document.getElementById('welcome'), true);
@@ -415,6 +474,7 @@ export const guest = (() => {
         lang.init();
         offline.init();
         comment.init();
+        chat.init();
         progress.init();
 
         config = storage('config');
@@ -481,6 +541,7 @@ export const guest = (() => {
     const init = () => {
         theme.init();
         session.init();
+        pwa.init();
 
         if (session.isAdmin()) {
             storage('user').clear();
@@ -504,12 +565,16 @@ export const guest = (() => {
             util,
             theme,
             comment,
+            chat,
+            emojiPicker,
+            pwa,
             guest: {
                 open,
                 modal,
                 showStory,
                 closeInformation,
                 submitRsvp,
+                selectRsvp,
             },
         };
     };
