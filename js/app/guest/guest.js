@@ -350,6 +350,7 @@ export const guest = (() => {
             if (entries[0].isIntersecting && !triggered) {
                 triggered = true;
                 observer.disconnect();
+                pwa.dismiss();
                 util.timeOut(() => bs.modal('modal-rsvp').show(), 600);
             }
         }, { threshold: 0.3 });
