@@ -38,6 +38,7 @@ export const pwa = (() => {
         const overlay = document.getElementById('pwa-install-overlay');
         if (overlay) {
             overlay.style.opacity = '0';
+            overlay.style.transform = 'translateY(-100%)';
             setTimeout(() => overlay.classList.add('d-none'), 400);
         }
     };
@@ -56,7 +57,10 @@ export const pwa = (() => {
         if (platformEl) platformEl.classList.remove('d-none');
 
         overlay.classList.remove('d-none');
-        requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+        requestAnimationFrame(() => { 
+            overlay.style.opacity = '1'; 
+            overlay.style.transform = 'translateY(0)';
+        });
     };
 
     const installNative = async () => {
@@ -93,10 +97,8 @@ export const pwa = (() => {
             hideOverlay();
         });
 
-        // Show after user opens invite (3s delay)
-        document.addEventListener('undangan.open', () => {
-            setTimeout(showOverlay, 3000);
-        });
+        // Show shortly after the app loads
+        setTimeout(showOverlay, 1500);
     };
 
     return {
