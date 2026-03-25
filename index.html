@@ -36,8 +36,9 @@
     <meta name="color-scheme" content="dark light">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="canonical" href="https://ulems.my.id/">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://ulems.my.id/assets/images/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://ulems.my.id/assets/images/icon-192x192.png">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./assets/images/icon-192x192.png">
 
     <!-- Preconnect CDN -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -626,9 +627,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#comment">
+                        <a class="nav-link" href="javascript:void(0)" onclick="undangan.chat.open()">
                             <i class="fa-solid fa-comments"></i>
-                            <span class="d-block" style="font-size: 0.7rem;">Recados</span>
+                            <span class="d-block" style="font-size: 0.7rem;">Chat</span>
                         </a>
                     </li>
                 </ul>
@@ -654,11 +655,6 @@
 
     <!-- Button Group -->
     <div class="d-flex position-fixed flex-column" style="bottom: 10vh; right: 2vh; z-index: 1030;">
-        <!-- RSVP Button -->
-        <button type="button" id="button-rsvp" class="btn btn-primary border-0 btn-sm rounded-circle d-none shadow mt-3" aria-label="Confirmar presença" data-bs-toggle="modal" data-bs-target="#modal-rsvp" style="width: 42px; height: 42px;">
-            <i class="fa-solid fa-envelope-open-text"></i>
-        </button>
-
         <!-- Theme Button -->
         <button type="button" id="button-theme" class="btn bg-light-dark border btn-sm rounded-circle d-none btn-transparent shadow-sm mt-3" aria-label="Change theme" onclick="undangan.theme.change()">
             <i class="fa-solid fa-circle-half-stroke"></i>
@@ -670,62 +666,228 @@
         </button>
     </div>
 
-    <!-- RSVP Modal -->
-    <div class="modal fade" id="modal-rsvp" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
-                <!-- Header decorativo -->
-                <div class="text-center text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="fa-solid fa-champagne-glasses mb-2" style="font-size: 2rem;"></i>
-                    <h5 class="font-esthetic m-0" style="font-size: 2rem;">Confirme a sua presença</h5>
-                    <small class="opacity-75">11 de Abril de 2026</small>
+    <!-- PWA Install Overlay -->
+    <div class="d-none position-fixed inset-0 w-100 vh-100" id="pwa-install-overlay" style="z-index: 1060; transition: opacity 0.4s ease; opacity: 0;">
+        <div class="position-absolute w-100 h-100" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);"></div>
+        <div class="position-relative d-flex justify-content-center align-items-center vh-100 p-3">
+            <div class="text-center w-100" style="max-width: 380px;">
+
+                <!-- App icon -->
+                <div class="mb-3">
+                    <img src="./assets/images/icon-192x192.png" alt="icon" class="rounded-4 shadow-lg" style="width: 80px; height: 80px;">
                 </div>
 
-                <div class="modal-body px-4 pt-4 pb-3">
-                    <!-- Nome -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold mb-1"><i class="fa-solid fa-user me-2 opacity-50"></i>O seu nome</label>
-                        <input type="text" class="form-control rounded-4 shadow-sm" id="rsvp-name" minlength="2" maxlength="50" placeholder="Como se chama?" autocomplete="name">
-                    </div>
+                <h5 class="text-white fw-bold mb-1">Convite A&C</h5>
+                <p class="text-white opacity-50 small mb-4">Instale para a melhor experiencia</p>
 
-                    <!-- Presença com cards -->
-                    <label class="form-label fw-semibold mb-2"><i class="fa-solid fa-heart me-2 opacity-50"></i>Vai estar presente?</label>
-                    <div class="d-flex gap-2 mb-3">
-                        <button type="button" class="btn btn-outline-secondary flex-fill rounded-4 py-3 border-2 rsvp-choice" id="rsvp-yes" onclick="document.getElementById('rsvp-yes').classList.add('btn-success','border-success','text-white');document.getElementById('rsvp-yes').classList.remove('btn-outline-secondary');document.getElementById('rsvp-no').classList.remove('btn-danger','border-danger','text-white');document.getElementById('rsvp-no').classList.add('btn-outline-secondary');document.getElementById('rsvp-presence-value').value='1';">
-                            <i class="fa-solid fa-check-circle d-block mb-1" style="font-size: 1.5rem;"></i>
-                            <span class="fw-semibold">Vou estar!</span>
-                        </button>
-                        <button type="button" class="btn flex-fill rounded-4 py-3 border-2 rsvp-choice btn-outline-secondary" id="rsvp-no" onclick="document.getElementById('rsvp-no').classList.add('btn-danger','border-danger','text-white');document.getElementById('rsvp-no').classList.remove('btn-outline-secondary');document.getElementById('rsvp-yes').classList.remove('btn-success','border-success','text-white');document.getElementById('rsvp-yes').classList.add('btn-outline-secondary');document.getElementById('rsvp-presence-value').value='2';">
-                            <i class="fa-solid fa-heart-crack d-block mb-1" style="font-size: 1.5rem;"></i>
-                            <span class="fw-semibold">Não posso</span>
+                <!-- Android / Chrome -->
+                <div class="pwa-platform d-none" id="pwa-android">
+                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
+                        <p class="mb-3 small opacity-75">Adicione ao ecra inicial para aceder rapidamente, receber notificacoes e usar o chat em modo offline.</p>
+                        <button class="btn btn-primary w-100 rounded-4 py-3 fw-bold shadow-sm border-0" onclick="undangan.pwa.installNative()">
+                            <i class="fa-solid fa-download me-2"></i>Instalar Aplicacao
                         </button>
                     </div>
-                    <input type="hidden" id="rsvp-presence-value" value="0">
+                </div>
 
-                    <!-- Mensagem -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold mb-1"><i class="fa-solid fa-message me-2 opacity-50"></i>Deixe uma mensagem <span class="text-muted fw-normal">(opcional)</span></label>
-                        <textarea class="form-control rounded-4 shadow-sm" id="rsvp-comment" rows="3" maxlength="1000" placeholder="Escreva os seus votos..."></textarea>
+                <!-- iOS Safari -->
+                <div class="pwa-platform d-none" id="pwa-ios">
+                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
+                        <p class="mb-4 small opacity-75">Adicione ao ecra inicial em 3 passos simples:</p>
+
+                        <div class="d-flex align-items-center text-start mb-3 pb-3 border-bottom">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">1</div>
+                            <div class="ms-3">
+                                <p class="fw-bold m-0 small">Toque em Partilhar</p>
+                                <p class="m-0 opacity-50 small"><i class="fa-solid fa-arrow-up-from-bracket me-1"></i>O icone na barra inferior</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center text-start mb-3 pb-3 border-bottom">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">2</div>
+                            <div class="ms-3">
+                                <p class="fw-bold m-0 small">Ecra Inicial</p>
+                                <p class="m-0 opacity-50 small"><i class="fa-solid fa-plus-square me-1"></i>Adicionar ao Ecra Inicial</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center text-start mb-2">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">3</div>
+                            <div class="ms-3">
+                                <p class="fw-bold m-0 small">Confirme</p>
+                                <p class="m-0 opacity-50 small">Toque em Adicionar</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="modal-footer border-0 px-4 pb-4 pt-0">
-                    <button type="button" class="btn btn-light rounded-4 shadow-sm" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary rounded-4 shadow-sm px-4" id="rsvp-submit" onclick="undangan.guest.submitRsvp(this)">
-                        <i class="fa-solid fa-paper-plane me-2"></i>Confirmar
-                    </button>
+                <!-- Desktop fallback -->
+                <div class="pwa-platform d-none" id="pwa-desktop">
+                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
+                        <p class="mb-3 small opacity-75">Para a melhor experiencia, abra este convite no seu telemovel.</p>
+                        <div class="border rounded-4 p-3 mb-2" style="background: rgba(var(--bs-emphasis-color-rgb), 0.03);">
+                            <i class="fa-solid fa-mobile-screen fa-2x mb-2 opacity-50"></i>
+                            <p class="m-0 small fw-bold">Escaneie com o seu telemovel</p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Tela de sucesso (oculta) -->
-                <div class="d-none text-center py-5 px-4" id="rsvp-success">
-                    <div class="mb-3" style="font-size: 4rem;">
-                        <i class="fa-solid fa-circle-check text-success"></i>
+                <button class="btn btn-link text-white text-decoration-none opacity-50 small" onclick="undangan.pwa.dismiss()">
+                    <i class="fa-solid fa-xmark me-1"></i>Agora nao
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RSVP Modal (fullscreen elegante) -->
+    <div class="modal fade" id="modal-rsvp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content border-0" style="background: transparent;">
+
+                <!-- Overlay backdrop com blur -->
+                <div class="position-fixed inset-0 w-100 h-100" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"></div>
+
+                <!-- Conteúdo centrado -->
+                <div class="position-relative d-flex justify-content-center align-items-center vh-100 p-3">
+
+                    <!-- Card principal (form de confirmação) -->
+                    <div class="w-100" style="max-width: 420px;" id="rsvp-form-card">
+                        <div class="text-center text-white mb-4">
+                            <div class="mb-3" style="font-size: 2.5rem;">
+                                <i class="fa-solid fa-champagne-glasses"></i>
+                            </div>
+                            <h2 class="font-esthetic m-0 mb-1" style="font-size: 2.5rem;">Confirme a sua Presença</h2>
+                            <p class="opacity-75 m-0" style="letter-spacing: 0.15em; font-size: 0.8rem;">ARNALDO & CLAUDIA &middot; 11 ABR 2026</p>
+                        </div>
+
+                        <div class="bg-theme-auto rounded-5 shadow-lg p-4">
+                            <!-- Nome -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold mb-2 small">O seu nome</label>
+                                <input type="text" class="form-control rounded-4 border-0 shadow-sm py-2" id="rsvp-name" minlength="2" maxlength="50" placeholder="Como se chama?" autocomplete="name" style="background: rgba(var(--bs-emphasis-color-rgb), 0.06);">
+                            </div>
+
+                            <!-- Presença -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold mb-2 small">Poderá comparecer?</label>
+                                <div class="d-flex gap-3">
+                                    <button type="button" class="btn flex-fill rounded-4 py-3 position-relative overflow-hidden rsvp-choice" id="rsvp-yes" style="border: 2px solid rgba(var(--bs-emphasis-color-rgb), 0.1); transition: all 0.3s ease;" onclick="undangan.guest.selectRsvp('yes')">
+                                        <i class="fa-solid fa-heart d-block mb-2" style="font-size: 1.8rem; color: #22c55e;"></i>
+                                        <span class="fw-bold d-block">Sim, vou!</span>
+                                        <small class="opacity-50">Conto convosco</small>
+                                    </button>
+                                    <button type="button" class="btn flex-fill rounded-4 py-3 position-relative overflow-hidden rsvp-choice" id="rsvp-no" style="border: 2px solid rgba(var(--bs-emphasis-color-rgb), 0.1); transition: all 0.3s ease;" onclick="undangan.guest.selectRsvp('no')">
+                                        <i class="fa-solid fa-heart-crack d-block mb-2" style="font-size: 1.8rem; color: #ef4444;"></i>
+                                        <span class="fw-bold d-block">Não posso</span>
+                                        <small class="opacity-50">Infelizmente</small>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="rsvp-presence-value" value="0">
+                            </div>
+
+                            <!-- Mensagem -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold mb-2 small">Mensagem <span class="fw-normal opacity-50">(opcional)</span></label>
+                                <textarea class="form-control rounded-4 border-0 shadow-sm py-2" id="rsvp-comment" rows="3" maxlength="1000" placeholder="Escreva os seus votos de felicidade..." style="background: rgba(var(--bs-emphasis-color-rgb), 0.06); resize: none;"></textarea>
+                            </div>
+
+                            <!-- Botão enviar -->
+                            <button type="button" class="btn btn-primary w-100 rounded-4 py-3 shadow border-0 fw-bold" id="rsvp-submit" onclick="undangan.guest.submitRsvp(this)" style="font-size: 1rem; letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-paper-plane me-2"></i>Confirmar Presença
+                            </button>
+                        </div>
+
+                        <p class="text-center mt-3 mb-0">
+                            <button type="button" class="btn btn-link text-white text-decoration-none opacity-50 small" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark me-1"></i>Fechar e responder depois
+                            </button>
+                        </p>
                     </div>
-                    <h5 class="fw-bold mb-2">Obrigado!</h5>
-                    <p class="text-muted mb-4" id="rsvp-success-message">A sua confirmação foi registada com sucesso.</p>
-                    <button type="button" class="btn btn-primary rounded-4 shadow-sm px-4" data-bs-dismiss="modal">Fechar</button>
+
+                    <!-- Card de sucesso (oculto) -->
+                    <div class="d-none w-100 text-center" style="max-width: 420px;" id="rsvp-success-card">
+                        <div class="bg-theme-auto rounded-5 shadow-lg p-5">
+                            <div class="mb-3" style="font-size: 4rem; line-height: 1;">
+                                <i class="fa-solid fa-circle-check" style="color: #22c55e;"></i>
+                            </div>
+                            <h4 class="font-esthetic mb-2" style="font-size: 2.2rem;">Obrigado!</h4>
+                            <p class="opacity-75 mb-4" id="rsvp-success-message">A sua confirmação foi registada.</p>
+                            <button type="button" class="btn btn-primary rounded-4 px-5 py-2 shadow-sm border-0 fw-bold" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-arrow-right me-2"></i>Continuar
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Chat Overlay (fullscreen WhatsApp-style) -->
+    <div class="d-none position-fixed w-100 vh-100 d-flex flex-column" id="chat-overlay" style="inset: 0; z-index: 1055;">
+
+        <!-- Chat Name Prompt -->
+        <div class="d-none position-absolute w-100 h-100 d-flex align-items-center justify-content-center" id="chat-name-prompt" style="z-index: 10; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+            <div class="bg-theme-auto rounded-4 shadow-lg p-4 mx-3" style="max-width: 340px; width: 100%; animation: rsvpSlideUp 0.4s ease;">
+                <div class="text-center mb-3">
+                    <i class="fa-solid fa-user-pen opacity-50 mb-2" style="font-size: 2rem;"></i>
+                    <h6 class="fw-bold m-0">Como se chama?</h6>
+                    <small class="opacity-50">O seu nome aparecera nas mensagens</small>
+                </div>
+                <input type="text" class="form-control rounded-4 border-0 shadow-sm text-center py-2 mb-3" id="chat-name-input" placeholder="Escreva o seu nome..." maxlength="50" style="background: rgba(var(--bs-emphasis-color-rgb), 0.06);">
+                <button class="btn btn-primary w-100 rounded-4 py-2 fw-semibold" onclick="undangan.chat.saveName()">
+                    <i class="fa-solid fa-arrow-right me-2"></i>Entrar no Chat
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Header -->
+        <div class="chat-header d-flex align-items-center px-3 py-2 shadow-sm bg-theme-auto" style="min-height: 60px; backdrop-filter: blur(0.5rem);">
+            <button class="btn btn-sm text-theme-auto rounded-circle me-2 p-0 d-flex align-items-center justify-content-center" style="width:36px; height:36px;" onclick="undangan.chat.close()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center">
+                    <h6 class="text-theme-auto fw-bold m-0" id="chat-header-title">Mural de Desejos</h6>
+                    <span class="badge bg-danger rounded-pill ms-2 d-none" id="chat-live-badge" style="font-size:0.6rem; animation: pulse 2s infinite;">AO VIVO</span>
+                </div>
+                <small class="text-theme-auto opacity-50" id="chat-header-subtitle" style="font-size:0.7rem;">Antes do grande dia</small>
+            </div>
+            <div class="d-flex gap-1">
+                <img src="./assets/images/icon-192x192.png" alt="icon" class="rounded-circle" style="width:36px; height:36px; border: 2px solid rgba(var(--bs-emphasis-color-rgb), 0.1);">
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="flex-grow-1 overflow-y-auto bg-chat-pattern" id="chat-messages" style="padding-bottom: 1rem; padding-top: 0.5rem;">
+        </div>
+
+        <!-- Music Request Panel (hidden by default) -->
+        <div class="d-none border-top bg-theme-auto px-3 py-2" id="chat-music-panel">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-music text-primary"></i>
+                <input type="text" class="form-control form-control-sm rounded-4 border-0 shadow-sm" id="chat-music-input" placeholder="Nome da musica que quer ouvir..." style="background: rgba(var(--bs-emphasis-color-rgb), 0.06);">
+                <button class="btn btn-primary btn-sm rounded-circle flex-shrink-0" style="width:32px; height:32px;" onclick="undangan.chat.sendMessage('music')"><i class="fa-solid fa-paper-plane" style="font-size:0.7rem;"></i></button>
+                <button class="btn btn-outline-secondary btn-sm rounded-circle flex-shrink-0" style="width:32px; height:32px;" onclick="undangan.chat.closeMusicInput()"><i class="fa-solid fa-xmark" style="font-size:0.7rem;"></i></button>
+            </div>
+        </div>
+
+        <!-- Emoji Picker Panel (hidden by default) -->
+        <div class="d-none border-top bg-theme-auto" id="emoji-picker-panel" style="max-height: 250px; overflow-y: auto;">
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-bar border-top bg-theme-auto px-2 py-2 d-flex align-items-end gap-1" style="min-height: 56px;">
+            <button class="btn btn-sm rounded-circle flex-shrink-0 opacity-75" style="width:38px; height:38px;" onclick="undangan.emojiPicker.toggle()" aria-label="Emoji">
+                <i class="fa-regular fa-face-smile" style="font-size:1.2rem;"></i>
+            </button>
+            <button class="btn btn-sm rounded-circle flex-shrink-0 opacity-75 d-none" id="chat-music-btn" style="width:38px; height:38px;" onclick="undangan.chat.openMusicInput()" aria-label="Pedir musica">
+                <i class="fa-solid fa-music" style="font-size:1rem;"></i>
+            </button>
+            <textarea class="form-control rounded-4 border-0 shadow-sm py-2" id="chat-input" rows="1" maxlength="1000" placeholder="Escreva uma mensagem..." style="background: rgba(var(--bs-emphasis-color-rgb), 0.06); resize: none; max-height: 100px; font-size: 0.9rem;"></textarea>
+            <button class="btn btn-primary btn-sm rounded-circle flex-shrink-0 shadow-sm d-flex align-items-center justify-content-center" id="chat-send-btn" style="width:40px; height:40px;" onclick="undangan.chat.sendMessage('text')">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 
