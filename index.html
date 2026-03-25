@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt" data-bs-theme="light">
+<html lang="pt" data-bs-theme="auto">
 
 <head>
     <!-- Common Tag -->
@@ -682,74 +682,45 @@
     </div>
 
     <!-- PWA Install Overlay -->
-    <div class="d-none position-fixed inset-0 w-100 vh-100" id="pwa-install-overlay" style="z-index: 1060; transition: opacity 0.4s ease; opacity: 0;">
-        <div class="position-absolute w-100 h-100" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);"></div>
-        <div class="position-relative d-flex justify-content-center align-items-center vh-100 p-3">
-            <div class="text-center w-100" style="max-width: 380px;">
-
-                <!-- App icon -->
-                <div class="mb-3">
-                    <img src="logo.webp" alt="icon" class="rounded-4 shadow-lg" style="width: 80px; height: 80px;">
+    <div class="d-none position-fixed top-0 start-0 w-100 p-3" id="pwa-install-overlay"
+        style="z-index: 1060; transition: transform 0.4s ease, opacity 0.4s ease; transform: translateY(-100%); opacity: 0;">
+        <div class="bg-theme-auto rounded-4 shadow-lg border p-3 mx-auto"
+            style="max-width: 400px; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+            <div class="d-flex align-items-center mb-0">
+                <img src="logo.webp" alt="icon" class="rounded-3 shadow-sm me-3" style="width: 40px; height: 40px;">
+                <div>
+                    <h6 class="fw-bold mb-0">Convite A&C</h6>
+                    <small class="opacity-75" style="font-size: 0.75rem;">Instalar em segundo plano?</small>
                 </div>
+            </div>
 
-                <h5 class="text-white fw-bold mb-1">Convite A&C</h5>
-                <p class="text-white opacity-50 small mb-4">Instale para a melhor experiencia</p>
-
-                <!-- Android / Chrome -->
-                <div class="pwa-platform d-none" id="pwa-android">
-                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
-                        <p class="mb-3 small opacity-75">Adicione ao ecra inicial para aceder rapidamente, receber notificacoes e usar o chat em modo offline.</p>
-                        <button class="btn btn-primary w-100 rounded-4 py-3 fw-bold shadow-sm border-0" onclick="undangan.pwa.installNative()">
-                            <i class="fa-solid fa-download me-2"></i>Instalar Aplicacao
-                        </button>
-                    </div>
+            <!-- Android / Chrome -->
+            <div class="pwa-platform d-none mt-3" id="pwa-android">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar
+                        Agora</button>
                 </div>
+            </div>
 
-                <!-- iOS Safari -->
-                <div class="pwa-platform d-none" id="pwa-ios">
-                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
-                        <p class="mb-4 small opacity-75">Adicione ao ecra inicial em 3 passos simples:</p>
-
-                        <div class="d-flex align-items-center text-start mb-3 pb-3 border-bottom">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">1</div>
-                            <div class="ms-3">
-                                <p class="fw-bold m-0 small">Toque em Partilhar</p>
-                                <p class="m-0 opacity-50 small"><i class="fa-solid fa-arrow-up-from-bracket me-1"></i>O icone na barra inferior</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center text-start mb-3 pb-3 border-bottom">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">2</div>
-                            <div class="ms-3">
-                                <p class="fw-bold m-0 small">Ecra Inicial</p>
-                                <p class="m-0 opacity-50 small"><i class="fa-solid fa-plus-square me-1"></i>Adicionar ao Ecra Inicial</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center text-start mb-2">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px;">3</div>
-                            <div class="ms-3">
-                                <p class="fw-bold m-0 small">Confirme</p>
-                                <p class="m-0 opacity-50 small">Toque em Adicionar</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- iOS Safari -->
+            <div class="pwa-platform d-none mt-3" id="pwa-ios">
+                <p class="small opacity-75 mb-2" style="font-size: 0.75rem;">Para instalar, toque em <i
+                        class="fa-solid fa-arrow-up-from-bracket mx-1"></i> e <strong>Adicionar ao Ecrã Inicial</strong>.</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.dismiss()">OK,
+                        Entendi</button>
                 </div>
+            </div>
 
-                <!-- Desktop fallback -->
-                <div class="pwa-platform d-none" id="pwa-desktop">
-                    <div class="bg-theme-auto rounded-5 p-4 shadow-lg mb-3">
-                        <p class="mb-3 small opacity-75">Para a melhor experiencia, abra este convite no seu telemovel.</p>
-                        <div class="border rounded-4 p-3 mb-2" style="background: rgba(var(--bs-emphasis-color-rgb), 0.03);">
-                            <i class="fa-solid fa-mobile-screen fa-2x mb-2 opacity-50"></i>
-                            <p class="m-0 small fw-bold">Escaneie com o seu telemovel</p>
-                        </div>
-                    </div>
+            <!-- Desktop fallback -->
+            <div class="pwa-platform d-none mt-3" id="pwa-desktop">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar
+                        Agora</button>
                 </div>
-
-                <button class="btn btn-link text-white text-decoration-none opacity-50 small" onclick="undangan.pwa.dismiss()">
-                    <i class="fa-solid fa-xmark me-1"></i>Agora nao
-                </button>
             </div>
         </div>
     </div>
