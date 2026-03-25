@@ -15,7 +15,7 @@
         "lint:html": "htmlhint **/*.html",
         "dev": "npx esbuild js/*.js --bundle --outdir=dist --servedir=. --serve=8080",
         "build": "npx esbuild js/*.js --bundle --minify --outdir=dist",
-        "build:public": "npm run build && node -e \"const fs = require('fs-extra'); fs.ensureDir('public').then(() => Promise.all(['assets', 'css', 'dist', 'index.html', 'dashboard.html', 'manifest.json', 'sw.js', 'banner.webp', 'logo.webp', 'wpt.webp', 'og-preview.jpg', 'casamento.webp', 'claudia.webp', 'pt.webp', 'pt.png', '20240907_173001.jpg', '20241207_180010.jpg', '20250614_162649.jpg', '20260314_114644.jpg', '20260314_175815.jpg', '73796385.png', 'IMG-20250811-WA0051.jpg', 'IMG-20260314-WA0033.jpg', 'lv_0_20241026231254.mp4', 'story.mp4'].map((f) => fs.copy(f, 'public/' + f)))).then(() => console.log('✅ Successfully!'));\""
+        "build:public": "npm run build && node -e \"const fs = require('fs-extra'); fs.ensureDir('public').then(() => { const files = ['assets', 'css', 'dist', 'index.html', 'dashboard.html', 'manifest.json', 'sw.js', 'banner.webp', 'logo.webp', 'wpt.webp', 'og-preview.jpg', 'casamento.webp', 'claudia.webp', 'pt.webp', 'pt.png', '20240907_173001.jpg', '20241207_180010.jpg', '20250614_162649.jpg', '20260314_114644.jpg', '20260314_175815.jpg', '73796385.png', 'IMG-20250811-WA0051.jpg', 'IMG-20260314-WA0033.jpg', 'lv_0_20241026231254.mp4', 'story.mp4', 'video.mp4']; return Promise.all(files.filter(f => fs.existsSync(f)).map((f) => fs.copy(f, 'public/' + f)))}).then(() => console.log('✅ Successfully!'));\""
     },
     "dependencies": {
         "esbuild": "^0.25.10"
