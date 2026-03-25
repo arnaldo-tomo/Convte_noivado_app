@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt" data-bs-theme="light">
+<html lang="pt" data-bs-theme="auto">
 
 <head>
     <!-- Common Tag -->
@@ -682,10 +682,12 @@
     </div>
 
     <!-- PWA Install Overlay -->
-    <div class="d-none position-fixed top-0 start-0 w-100 p-3" id="pwa-install-overlay" style="z-index: 1060; transition: transform 0.4s ease, opacity 0.4s ease; transform: translateY(-100%); opacity: 0;">
-        <div class="bg-theme-auto rounded-4 shadow-lg border p-3 mx-auto" style="max-width: 400px; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+    <div class="d-none position-fixed top-0 start-0 w-100 p-3" id="pwa-install-overlay"
+        style="z-index: 1060; transition: transform 0.4s ease, opacity 0.4s ease; transform: translateY(-100%); opacity: 0;">
+        <div class="bg-theme-auto rounded-4 shadow-lg border p-3 mx-auto"
+            style="max-width: 400px; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
             <div class="d-flex align-items-center mb-0">
-                <img src="logo.webp" alt="icon" class="rounded-3 shadow-sm me-3" style="width: 40px; height: 40px;">
+                <img src="logo.webp" alt="icon" class="rounded-3 shadow-sm bg-white p-1 me-3" style="width: 44px; height: 44px; object-fit: contain;">
                 <div>
                     <h6 class="fw-bold mb-0">Convite A&C</h6>
                     <small class="opacity-75" style="font-size: 0.75rem;">Instalar em segundo plano?</small>
@@ -696,16 +698,19 @@
             <div class="pwa-platform d-none mt-3" id="pwa-android">
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
-                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar Agora</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar
+                        Agora</button>
                 </div>
             </div>
 
             <!-- iOS Safari -->
             <div class="pwa-platform d-none mt-3" id="pwa-ios">
-                <p class="small opacity-75 mb-2" style="font-size: 0.75rem;">Para instalar, toque em <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i> e <strong>Adicionar ao Ecrã Inicial</strong>.</p>
+                <p class="small opacity-75 mb-2" style="font-size: 0.75rem;">Para instalar, toque em <i
+                        class="fa-solid fa-arrow-up-from-bracket mx-1"></i> e <strong>Adicionar ao Ecrã Inicial</strong>.</p>
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
-                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.dismiss()">OK, Entendi</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.dismiss()">OK,
+                        Entendi</button>
                 </div>
             </div>
 
@@ -713,7 +718,8 @@
             <div class="pwa-platform d-none mt-3" id="pwa-desktop">
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill" onclick="undangan.pwa.dismiss()">Não</button>
-                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar Agora</button>
+                    <button class="btn btn-sm btn-primary w-50 rounded-pill fw-bold" onclick="undangan.pwa.installNative()">Instalar
+                        Agora</button>
                 </div>
             </div>
         </div>
