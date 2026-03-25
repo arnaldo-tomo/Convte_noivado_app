@@ -6,7 +6,7 @@ const STATIC_ASSETS = [
     '/css/common.css',
     '/css/animation.css',
     '/dist/guest.js',
-    '/assets/images/icon-192x192.png',
+    '/logo.webp',
     '/manifest.json',
 ];
 
