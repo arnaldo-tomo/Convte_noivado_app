@@ -101,7 +101,7 @@ export const video = (() => {
                 return loaded.then(() => res);
             })).catch((err) => {
                 bar.style.backgroundColor = 'red';
-                inf.innerText = `Error loading video`;
+                inf.innerText = `Erro ao carregar o vídeo`;
                 console.error(err);
             });
         };

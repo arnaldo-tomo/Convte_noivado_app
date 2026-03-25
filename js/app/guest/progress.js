@@ -33,6 +33,18 @@ export const progress = (() => {
         return `(${loaded}/${total}) [${parseInt((loaded / total) * 100).toFixed(0)}%]`;
     };
 
+    const getPtType = (type) => {
+        return {
+            'image': 'imagens',
+            'video': 'vídeo',
+            'audio': 'áudio',
+            'libs': 'bibliotecas',
+            'config': 'configurações',
+            'comment': 'comentários',
+            'gif': 'animações'
+        }[type] || type;
+    };
+
     /**
      * @param {string} type
      * @param {boolean} [skip=false]
@@ -44,7 +56,7 @@ export const progress = (() => {
         }
 
         loaded += 1;
-        info.innerText = `Loading ${type} ${skip ? 'skipped' : 'complete'} ${showInformation()}`;
+        info.innerText = `A carregar ${getPtType(type)} ${skip ? 'ignorado' : 'concluído'} ${showInformation()}`;
         bar.style.width = Math.min((loaded / total) * 100, 100).toString() + '%';
 
         if (loaded === total) {
@@ -62,7 +74,7 @@ export const progress = (() => {
         if (valid) {
             valid = false;
             bar.style.backgroundColor = 'red';
-            info.innerText = `Error loading ${type} ${showInformation()}`;
+            info.innerText = `Erro ao carregar ${getPtType(type)} ${showInformation()}`;
             document.dispatchEvent(new Event('undangan.progress.invalid'));
         }
     };

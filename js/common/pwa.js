@@ -64,14 +64,17 @@ export const pwa = (() => {
     };
 
     const installNative = async () => {
-        if (!deferredPrompt) return;
+        hideOverlay();
+        
+        if (!deferredPrompt) {
+            return;
+        }
 
         deferredPrompt.prompt();
         const result = await deferredPrompt.userChoice;
 
         if (result.outcome === 'accepted') {
             info.set('pwa_installed', true);
-            hideOverlay();
         }
 
         deferredPrompt = null;
