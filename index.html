@@ -26,7 +26,7 @@
     <meta property="og:image:height" content="980">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_PT">
-    <meta property="og:url" content="https://ulems.my.id">
+    <meta property="og:url" content="http://convite.arnaldotomo.dev/">
     <meta property="og:site_name" content="Convite de Noivado de Arnaldo & Claudia">
 
     <!-- Appearance -->
@@ -35,10 +35,10 @@
     <meta name="theme-color" content="#000000">
     <meta name="color-scheme" content="dark light">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="canonical" href="https://ulems.my.id/">
+    <link rel="canonical" href="http://convite.arnaldotomo.dev/">
     <link rel="manifest" href="./manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="./assets/images/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="./assets/images/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.webp">
+    <link rel="apple-touch-icon" sizes="192x192" href="logo.webp">
 
     <!-- Preconnect CDN -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -587,10 +587,10 @@
 
                         <div class="row align-items-center justify-content-between flex-column pb-3">
                             <div class="col-auto">
-                                <small>Build with<i class="fa-solid fa-heart mx-1"></i>Arnaldo Tomo</small>
+                                <small>Build By<i class="fa-solid fa-heart mx-1"></i>Arnaldo Tomo</small>
                             </div>
                             <div class="col-auto">
-                                <small><i class="fa-brands fa-github me-1"></i><a target="_blank" href="https://github.com/dewanakl/undangan">github</a></small>
+                                <small><i class="fa-brands fa-github me-1"></i><a target="_blank" href="https://github.com/arnaldo-tomo/Convte_noivado_app">github</a></small>
                                 <small><i class="fa-solid fa-chart-simple me-1"></i><a target="_blank" href="https://status.ulems.my.id">status</a></small>
                                 <small><i class="fa-solid fa-music me-1"></i><a target="_blank" href="https://pixabay.com/music/modern-classical-pure-love-304010">music</a></small>
                             </div>
@@ -649,6 +649,14 @@
                 <div id="guest-name" data-message="Estimado(a) convidado(a)"></div>
 
                 <button type="button" class="btn btn-light shadow rounded-4 mt-3 mx-auto" onclick="undangan.guest.open(this)"><i class="fa-solid fa-envelope-open fa-bounce me-2"></i>Abrir Convite</button>
+
+                <!-- API Status -->
+                <div class="mt-4" id="api-status">
+                    <div class="d-inline-flex align-items-center gap-2 rounded-pill px-3 py-1" style="background: rgba(var(--bs-emphasis-color-rgb), 0.06); backdrop-filter: blur(4px);">
+                        <span class="spinner-grow spinner-grow-sm text-secondary" id="api-status-spinner" style="width: 8px; height: 8px;"></span>
+                        <small class="opacity-50" id="api-status-text" style="font-size: 0.7rem;">A verificar servicos...</small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -674,7 +682,7 @@
 
                 <!-- App icon -->
                 <div class="mb-3">
-                    <img src="./assets/images/icon-192x192.png" alt="icon" class="rounded-4 shadow-lg" style="width: 80px; height: 80px;">
+                    <img src="logo.webp" alt="icon" class="rounded-4 shadow-lg" style="width: 80px; height: 80px;">
                 </div>
 
                 <h5 class="text-white fw-bold mb-1">Convite A&C</h5>
@@ -854,7 +862,7 @@
                 <small class="text-theme-auto opacity-50" id="chat-header-subtitle" style="font-size:0.7rem;">Antes do grande dia</small>
             </div>
             <div class="d-flex gap-1">
-                <img src="./assets/images/icon-192x192.png" alt="icon" class="rounded-circle" style="width:36px; height:36px; border: 2px solid rgba(var(--bs-emphasis-color-rgb), 0.1);">
+                <img src="logo.webp" alt="icon" class="rounded-circle" style="width:36px; height:36px; border: 2px solid rgba(var(--bs-emphasis-color-rgb), 0.1);">
             </div>
         </div>
 
@@ -895,7 +903,7 @@
     <div class="loading-page bg-white-black" id="loading" style="opacity: 1;">
         <div class="d-flex justify-content-center align-items-center vh-100 overflow-y-auto">
             <div class="d-flex flex-column width-loading text-center">
-                <img src="./assets/images/placeholder.webp" data-src="./assets/images/icon-192x192.png" fetchpriority="high" class="img-fluid mb-3 mx-auto object-fit-cover opacity-0" alt="icon" style="width: 3.5rem; height: 3.5rem;">
+                <img src="./assets/images/placeholder.webp" data-src="logo.webp" fetchpriority="high" class="img-fluid mb-3 mx-auto object-fit-cover opacity-0" alt="icon" style="width: 3.5rem; height: 3.5rem;">
                 <div class="progress" role="progressbar" style="height: 0.5rem;" aria-label="progress bar">
                     <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
                 </div>
@@ -907,8 +915,8 @@
         </div>
         <div class="text-center position-fixed w-100" style="bottom: 8%; left: 0;">
             <div class="d-flex flex-column">
-                <small class="text-secondary">from</small>
-                <small class="text-theme-auto"><i class="fa-brands fa-github me-1"></i>dewanakl</small>
+                <small class="text-secondary">Build By</small>
+                <small class="text-theme-auto"><i class="fa-brands fa-github me-1"></i>Arnaldo Tomo</small>
             </div>
         </div>
     </div>

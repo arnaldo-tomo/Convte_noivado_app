@@ -33,6 +33,60 @@ export const guest = (() => {
     /**
      * @returns {void}
      */
+    /**
+     * @returns {void}
+     */
+    const checkApiStatus = () => {
+        const spinner = document.getElementById('api-status-spinner');
+        const text = document.getElementById('api-status-text');
+        if (!spinner || !text) return;
+
+        const apiUrl = (document.body.getAttribute('data-url') || '').replace(/\/$/, '');
+        const token = document.body.getAttribute('data-key');
+
+        const startTime = Date.now();
+
+        fetch(`${apiUrl}/api/v2/config`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'x-access-key': token || '',
+            },
+        })
+            .then((res) => {
+                const latency = Date.now() - startTime;
+                if (res.ok) {
+                    spinner.classList.remove('spinner-grow', 'text-secondary');
+                    spinner.style.width = '8px';
+                    spinner.style.height = '8px';
+                    spinner.style.borderRadius = '50%';
+                    spinner.style.background = '#22c55e';
+                    spinner.style.animation = 'none';
+                    text.textContent = `Todos os servicos operacionais  ·  ${latency}ms`;
+                    text.style.color = '#22c55e';
+                } else {
+                    spinner.classList.remove('spinner-grow', 'text-secondary');
+                    spinner.style.width = '8px';
+                    spinner.style.height = '8px';
+                    spinner.style.borderRadius = '50%';
+                    spinner.style.background = '#f59e0b';
+                    spinner.style.animation = 'none';
+                    text.textContent = 'Servico com resposta parcial';
+                    text.style.color = '#f59e0b';
+                }
+            })
+            .catch(() => {
+                spinner.classList.remove('spinner-grow', 'text-secondary');
+                spinner.style.width = '8px';
+                spinner.style.height = '8px';
+                spinner.style.borderRadius = '50%';
+                spinner.style.background = '#ef4444';
+                spinner.style.animation = 'none';
+                text.textContent = 'Servico indisponivel';
+                text.style.color = '#ef4444';
+            });
+    };
+
     const countDownDate = () => {
         const count = (new Date(document.body.getAttribute('data-time').replace(' ', 'T'))).getTime();
 
@@ -476,6 +530,7 @@ export const guest = (() => {
         comment.init();
         chat.init();
         progress.init();
+        checkApiStatus();
 
         config = storage('config');
         information = storage('information');
