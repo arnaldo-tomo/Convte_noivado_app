@@ -27,6 +27,18 @@ export const card = (() => {
 
     const maxCommentLength = 300;
 
+    const formatDt = (dtStr) => {
+        if (!dtStr) return '';
+        try {
+            const str = dtStr.replace(' ', 'T');
+            const dt = new Date(str.endsWith('Z') ? str : str + 'Z');
+            if (isNaN(dt)) return dtStr;
+            return new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(dt);
+        } catch(e) {
+            return dtStr;
+        }
+    };
+
     /**
      * @returns {string}
      */
@@ -163,7 +175,7 @@ export const card = (() => {
         const head = `
         <div class="d-flex justify-content-between align-items-center">
             <p class="text-theme-auto text-truncate m-0 p-0" style="font-size: 0.95rem;">${renderTitle(c)}</p>
-            <small class="text-theme-auto m-0 p-0" style="font-size: 0.75rem;">${c.created_at}</small>
+            <small class="text-theme-auto m-0 p-0" style="font-size: 0.75rem;">${formatDt(c.created_at)}</small>
         </div>
         <hr class="my-1">`;
 
@@ -174,11 +186,12 @@ export const card = (() => {
             </div>`;
         }
 
-        const moreMaxLength = c.comment.length > maxCommentLength;
-        const data = util.convertMarkdownToHTML(util.escapeHtml(moreMaxLength ? (c.comment.slice(0, maxCommentLength) + '...') : c.comment));
+        const commentText = c.comment || '';
+        const moreMaxLength = commentText.length > maxCommentLength;
+        const data = util.convertMarkdownToHTML(util.escapeHtml(moreMaxLength ? (commentText.slice(0, maxCommentLength) + '...') : commentText));
 
         return head + `
-        <p dir="auto" class="text-theme-auto my-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" data-comment="${util.base64Encode(c.comment)}" id="content-${c.uuid}">${data}</p>
+        <p dir="auto" class="text-theme-auto my-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" data-comment="${util.base64Encode(commentText)}" id="content-${c.uuid}">${data}</p>
         ${moreMaxLength ? `<p class="d-block mb-2 mt-0 mx-0 p-0"><a class="text-theme-auto" role="button" style="font-size: 0.85rem;" data-show="false" onclick="undangan.comment.showMore(this, '${c.uuid}')">Ver mais</a></p>` : ''}`;
     };
 
