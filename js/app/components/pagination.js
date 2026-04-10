@@ -2,7 +2,7 @@ import { util } from '../../common/util.js';
 
 export const pagination = (() => {
 
-    let perPage = 10;
+    let perPage = 999;
     let pageNow = 0;
     let totalData = 0;
 
@@ -93,13 +93,13 @@ export const pagination = (() => {
 
         const next = () => {
             pageNow += perPage;
-            button.innerHTML = 'Next' + button.innerHTML;
+            button.innerHTML = 'Próximo ' + button.innerHTML;
             process();
         };
 
         const prev = () => {
             pageNow -= perPage;
-            button.innerHTML = button.innerHTML + 'Prev';
+            button.innerHTML = button.innerHTML + ' Anterior';
             process();
         };
 
@@ -166,7 +166,7 @@ export const pagination = (() => {
         <ul class="pagination mb-2 shadow-sm rounded-4">
             <li class="page-item disabled" id="previous">
                 <button class="page-link rounded-start-4" onclick="undangan.comment.pagination.previous(this)" data-offline-disabled="false">
-                    <i class="fa-solid fa-circle-left me-1"></i>Prev
+                    <i class="fa-solid fa-circle-left me-1"></i>Anterior
                 </button>
             </li>
             <li class="page-item disabled">
@@ -174,7 +174,7 @@ export const pagination = (() => {
             </li>
             <li class="page-item" id="next">
                 <button class="page-link rounded-end-4" onclick="undangan.comment.pagination.next(this)" data-offline-disabled="false">
-                    Next<i class="fa-solid fa-circle-right ms-1"></i>
+                    Próximo<i class="fa-solid fa-circle-right ms-1"></i>
                 </button>
             </li>
         </ul>`;
